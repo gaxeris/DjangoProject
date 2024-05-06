@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Категории постов
+{% endblock %}
+
+{% block content%}
+
+    <ul>
+    {% for category in categories %}
+        <li>
+            {{category}}
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
