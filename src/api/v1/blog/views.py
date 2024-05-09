@@ -1,8 +1,8 @@
 
 from rest_framework import viewsets
 
-from apps.blog.models import Post
-from apps.blog.serializers import PostSerializer
+from apps.blog.models import Category, Post
+from apps.blog.serializers import CategorySerializer, PostSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -10,3 +10,6 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
