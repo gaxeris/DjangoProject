@@ -1,21 +1,39 @@
+from django.apps import apps
 from django.db import models
+from django.db.models import OuterRef
+from django.db.models.functions import JSONObject
+
+from  django.contrib.postgres.expressions import ArraySubquery
+
+
 
 
 class PostManager(models.Manager):
     
-    def get_3_recent_posts_per_category(self):
+    
+    def get_recent_posts_per_category_subquery(self):
         
-        from apps.blog.models import Category
-        all_categories = Category.objects.all()
+    #    query_set = self.get_queryset
         
-        query_set = self.get_queryset()
-        result_query = query_set.none()
-        
-        for category in all_categories:
-            result_query = result_query.union(
-                query_set.filter(category=category)
-                .order_by('-created_at')
-                [:3]
+        recent_posts_subquery = self.filter(category=OuterRef('pk')).values(
+            data = JSONObject(
+                    title = 'title', text = 'text', slug = 'slug'
             )
+        ).order_by('-created_at')[:3]
         
-        return result_query.order_by('category', '-created_at')
+        return recent_posts_subquery
+        
+        
+class CategoryManager(models.Manager):
+    
+    def get_recent_posts_per_category(self):
+        
+        #query_set = self.get_queryset()
+        
+        recent_posts_subquery = apps.get_model('blog','Post').objects.get_recent_posts_per_category_subquery()
+        
+        result_query = self.annotate(
+            recent_posts = ArraySubquery(recent_posts_subquery)
+        ).values('name', 'description', 'slug', 'recent_posts')
+        
+        return result_query

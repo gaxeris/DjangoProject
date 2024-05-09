@@ -2,7 +2,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from apps.blog.managers import PostManager
+from apps.blog.managers import CategoryManager, PostManager
 
 
 # Create your models here.
@@ -13,6 +13,8 @@ class Category(models.Model):
     description = models.TextField(null=True, blank=True)
     
     slug = models.SlugField(unique=True)
+    
+    objects = CategoryManager()
     
     def __str__(self):
         return self.name

@@ -29,16 +29,7 @@ def index(request):
         recent_posts = ArraySubquery(recent_posts_subquery)
     ).values('name', 'description', 'slug', 'recent_posts')
         
-    
-    """    
-    deprecated
-    расширение для Manager записанного в objects модели
-    использовалось до миграции на постгрес и выражения ArraySubquery
-    
-    recent_posts_per_category = Post.objects.get_3_recent_posts_per_category()
-    
-    print(recent_posts_per_category)
-    """
+
     
     context = {'categories': categories_with_recent_posts}
     
@@ -47,9 +38,9 @@ def index(request):
 
 def display_all_categories(request):
     
-    categories_query = Category.objects.all()
+    categories_with_recent_posts = Category.objects.get_recent_posts_per_category()
     
-    context = {'categories': categories_query}
+    context = {'categories': categories_with_recent_posts}
     
     return render(request, 'blog/categories.html', context)
 
@@ -82,5 +73,4 @@ def create_new_post(request):
         form = PostForm()
     
  
-    
     return render(request, 'blog/post-form.html', {'form': form})
