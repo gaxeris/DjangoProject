@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+
+
 {% block title %}
     Блог
 {% endblock %}
@@ -14,7 +16,7 @@
             <ul>
             {% for recent_post in category.recent_posts %}
                 <li>
-                    <a href="{{recent_post.slug}}">
+                    <a href="posts/{{recent_post.slug}}">
                         <h4>{{recent_post.title}}</h4>
                     </a>
                     <a>
@@ -24,7 +26,14 @@
             {% endfor %}
 
             </ul>
+
+            <hr>
+
         </div>
     {% endfor %}
+
+
+
+
 
 {% endblock %}

@@ -1,7 +1,7 @@
 
 from django.db import models
 from django.urls import reverse
-
+from django.utils.text import slugify
 from apps.blog.managers import PostManager
 
 
@@ -32,11 +32,13 @@ class Post(models.Model):
     # base manager eксtension
     objects = PostManager()
     
+    
     def __str__(self):
         return self.title 
     
+    
     def get_unique_slug(self):
-        slug = reverse(self.title)
+        slug = slugify(self.title)
         unique_slug = slug
         num = 1
         while Post.objects.filter(slug=unique_slug).exists():
@@ -44,5 +46,13 @@ class Post(models.Model):
             num += 1
         return unique_slug
     
+    
+    def save(self, *args, **kwargs):
+        
+        if not self.id:
+            self.slug = self.get_unique_slug()
+            
+        super(Post, self).save(*args, **kwargs)
+        
     
     

@@ -1,9 +1,11 @@
-from django.shortcuts import get_object_or_404, render
+
+from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import OuterRef
 from django.db.models.functions import JSONObject
 
 from  django.contrib.postgres.expressions import ArraySubquery
 
+from apps.blog.forms import PostForm
 from apps.blog.models import Category, Post
 
 # Create your views here.
@@ -21,7 +23,7 @@ def index(request):
         data = JSONObject(
                 title = 'title', text = 'text', slug = 'slug'
         )
-    )[:3]
+    ).order_by('-created_at')[:3]
 
     categories_with_recent_posts = Category.objects.annotate(
         recent_posts = ArraySubquery(recent_posts_subquery)
@@ -59,6 +61,26 @@ def get_post_by_url(request, url):
     context = {
         'title': post.title,
         'text' : post.text,
+        'category': post.category
         }
     
     return render(request, 'blog/single-post.html', context)
+
+
+def create_new_post(request):
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        
+        if form.is_valid():
+            
+            form.save()
+            
+            return redirect('index')
+    
+    else:
+        form = PostForm()
+    
+ 
+    
+    return render(request, 'blog/post-form.html', {'form': form})
