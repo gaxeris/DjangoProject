@@ -8,24 +8,19 @@
 
 {% block content %}
 
-    {% for category in categories %}
         <div>
             
-            <h2>{{category.name}}</h2>
 
-            <ul>
-            {% for recent_post in category.recent_posts %}
-                <li>
-                    <a href="posts/{{recent_post.slug}}">
-                        <h4>{{recent_post.title}}</h4>
-                    </a>
-                    <a>
-                        {{recent_post.text}}
-                    </a>
-                </li>
+            {% for recent_post in recent_posts %}
+
+                <a href="posts/{{recent_post.slug}}">
+                    <h4>{{recent_post.title}}</h4>
+                </a>
+                <a>
+                    {{recent_post.text}}
+                </a>
+
             {% endfor %}
-
-            </ul>
 
             <hr>
 
