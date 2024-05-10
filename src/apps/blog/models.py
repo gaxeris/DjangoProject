@@ -9,7 +9,7 @@ from apps.blog.managers import CategoryManager, PostManager
 
 class Category(models.Model):
 
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     
     slug = models.SlugField(unique=True)
