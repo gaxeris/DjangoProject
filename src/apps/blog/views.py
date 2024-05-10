@@ -11,27 +11,10 @@ from apps.blog.models import Category, Post
 # Create your views here.
 
 def index(request):
-
-    """     
-    json формата:
-    [{name: ..., ..., recent_posts = [{title: ...,}, 
-                                      {title: ...,}, {title: ...,}]},..
-    ]
-    """
     
-    recent_posts_subquery = Post.objects.filter(category=OuterRef('pk')).values(
-        data = JSONObject(
-                title = 'title', text = 'text', slug = 'slug'
-        )
-    ).order_by('-created_at')[:3]
+    recent_posts = Post.objects.order_by('-created_at')
 
-    categories_with_recent_posts = Category.objects.annotate(
-        recent_posts = ArraySubquery(recent_posts_subquery)
-    ).values('name', 'description', 'slug', 'recent_posts')
-        
-
-    
-    context = {'categories': categories_with_recent_posts}
+    context = {'recent_posts': recent_posts}
     
     return render(request, 'blog/index.html', context)
 
