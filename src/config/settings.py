@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     
     'apps.main.apps.MainConfig',
     'apps.blog.apps.BlogConfig',
+    'apps.todo.apps.TodoConfig',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    
+    'http://localhost:3000',
 ]
 
 REST_FRAMEWORK = {
