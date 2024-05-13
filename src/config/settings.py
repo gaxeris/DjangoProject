@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     
+ #   'apps.users.apps.UsersConfig'
     'apps.main.apps.MainConfig',
     'apps.blog.apps.BlogConfig',
     'apps.todo.apps.TodoConfig',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'http://localhost:5173',
 ]
 
 REST_FRAMEWORK = {
