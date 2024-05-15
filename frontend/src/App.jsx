@@ -1,15 +1,21 @@
-import react, { useState, useEffect } from "react"
-import TodosPage from "./pages/TodosPage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import TodosPage from "./pages/todos/TodosPage";
+import BlogPage from './pages/blog/BlogPage';
 
 function App() {
 
-
-
   return (
-    <>
-      <TodosPage />
-    </>
+    <BrowserRouter>
+      <Routes>
+
+        <Route path="/todos/" element={<TodosPage />} />
+
+        <Route path="/posts/" element={<BlogPage />} />
+  
+      </Routes>
+    </BrowserRouter>
   )
+
 }
 
 export default App
