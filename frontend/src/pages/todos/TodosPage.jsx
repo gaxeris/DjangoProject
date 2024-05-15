@@ -1,5 +1,5 @@
 import react, { useState, useEffect } from "react"
-import TodoItem from '../components/todo/TodoItem'
+import TodoItem from '../../components/todos/TodoItem'
 
 function TodosPage() {
 
