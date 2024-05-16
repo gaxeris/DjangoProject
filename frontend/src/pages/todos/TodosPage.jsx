@@ -59,7 +59,7 @@ function TodosPage() {
       </div>
       <div>
         <h2>Create a Todo Item</h2>
-          <form onSubmit={createNote}>
+          <form onSubmit={createTodoItems}>
             <label htmlFor="title">Title:</label>
             <br />
             <input
@@ -70,10 +70,10 @@ function TodosPage() {
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
             />
-            <label htmlFor="content">Description:</label>
+            <label htmlFor="description">Description:</label>
             <br />
             <textarea
-                id="content"
+                id="description"
                 name="content"
                 required
                 value={description}
