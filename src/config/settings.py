@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     
- #   'apps.users.apps.UsersConfig'
+    'apps.userprofile.apps.UserProfileConfig',
     'apps.main.apps.MainConfig',
     'apps.blog.apps.BlogConfig',
     'apps.todo.apps.TodoConfig',

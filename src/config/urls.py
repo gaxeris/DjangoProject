@@ -23,6 +23,8 @@ from api.v1.urls import router
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('api/', include(router.urls)),
+    path('api/v1/users/', include('apps.userprofile.urls')),
+    path('api/v1/', include(router.urls)),
+    
     path('api-auth/', include('rest_framework.urls')),
 ]
