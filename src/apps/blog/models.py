@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from apps.blog.managers import CategoryManager, PostManager
+from apps.userprofile.models import UserProfile
 
 
 # Create your models here.
@@ -21,6 +22,8 @@ class Category(models.Model):
     
     
 class Post(models.Model):
+
+    author = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 
     title = models.CharField(max_length=150)
     text = models.TextField()
