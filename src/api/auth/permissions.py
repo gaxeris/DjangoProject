@@ -26,6 +26,6 @@ class BlogPostCustomPermission(permissions.BasePermission):
             'partial_update',
             'destroy'
         ]:
-            return obj.author == request.user or request.user.is_admin
+            return obj.author == request.user or request.user.is_staff
         else:
             return False
