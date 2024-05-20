@@ -5,11 +5,10 @@ from django.db.models.signals import post_save
 
 class UserProfile(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    nickname = models.CharField(null=False, default=str(user))
+    user_name = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
     def __str__(self):  
-        return (self.user_name)
+        return str(self.user_name)
 
 
 def create_user_profile(sender, instance, created, **kwargs):
