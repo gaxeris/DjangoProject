@@ -8,6 +8,5 @@ class User(AbstractUser):
     
     class Meta:
         db_table = 'auth_user'
-        app_label = 'users'
 
     
