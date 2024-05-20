@@ -41,13 +41,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     
-#    'apps.userprofile.apps.UserProfileConfig',
+    'apps.users.apps.UsersConfig',
     'apps.main.apps.MainConfig',
     'apps.blog.apps.BlogConfig',
     'apps.todo.apps.TodoConfig',
 ]
 
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
