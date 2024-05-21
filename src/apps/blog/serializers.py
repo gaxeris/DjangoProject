@@ -6,6 +6,8 @@ from apps.blog.models import Category, Post
 
 class PostSerializer(serializers.ModelSerializer):
     
+    author = serializers.ReadOnlyField(source='author.username')
+    
     class Meta:
         model = Post
         fields = ['id', 'author', 'title', 'text', 'category']
