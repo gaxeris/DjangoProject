@@ -24,7 +24,12 @@ class Category(models.Model):
     
 class Post(models.Model):
 
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        related_name='written_posts',
+        null=True
+    )
 
     title = models.CharField(max_length=150)
     text = models.TextField()
