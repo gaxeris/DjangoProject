@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from apps.blog.api.v1.permissions import BlogPostCustomPermission
 from apps.blog.models import Category, Post
-from apps.blog.api.v1.serializers import CategorySerializer, PostSerializer, RecentPostsCategorySerializer
+from apps.blog.api.v1.serializers import AuthorPostsSerializer, CategorySerializer, PostSerializer, RecentPostsCategorySerializer
+from apps.users.models import User
 
 
 
@@ -47,4 +48,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(result_categories, many=True)
         return Response(serializer.data)    
+    
+
+class AuthorsViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = AuthorPostsSerializer
 
