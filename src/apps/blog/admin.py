@@ -6,12 +6,11 @@ from apps.blog.models import Category, Post
 
 # генерация url при создании записей в админке
 class CategoryAdmin(admin.ModelAdmin):
-
     prepopulated_fields = {'slug': ('name',)}
 
 
-class PostAdmin(admin.ModelAdmin):
 
+class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 

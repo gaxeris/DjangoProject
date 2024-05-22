@@ -22,16 +22,20 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from api.v1.urls import router
+from apps.blog.api.v1.urls import router_blog
+from apps.todo.api.v1.urls import router_todo
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('api/v1/users/', include('apps.users.urls')),
-    path('api/v1/', include(router.urls)),
-    
     path('api-auth/', include('rest_framework.urls')),
+    
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    
+    path('api/v1/users/', include('apps.users.urls')),
+    
+    path('api/v1/blog/', include(router_blog.urls)),
+    path('api/v1/todo', include(router_todo.urls)),
 ]

@@ -10,7 +10,6 @@ from django.conf import settings
 # Create your models here.
 
 class Category(models.Model):
-
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     
@@ -18,12 +17,13 @@ class Category(models.Model):
     
     objects = CategoryManager()
     
+    
     def __str__(self):
         return self.name
     
+   
     
 class Post(models.Model):
-
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
@@ -40,7 +40,7 @@ class Post(models.Model):
     
     slug = models.SlugField(unique=True)
     
-    # base manager eксtension
+    # base manager eхtension
     objects = PostManager()
     
     

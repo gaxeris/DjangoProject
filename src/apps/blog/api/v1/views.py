@@ -1,27 +1,23 @@
-
-
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 
-from api.auth.permissions import BlogPostCustomPermission
+from apps.blog.api.v1.permissions import BlogPostCustomPermission
 from apps.blog.models import Category, Post
-from apps.blog.serializers import CategorySerializer, PostSerializer, RecentPostsCategorySerializer
+from apps.blog.api.v1.serializers import CategorySerializer, PostSerializer, RecentPostsCategorySerializer
 
 
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (BlogPostCustomPermission, )
     
     
     @action(detail=False, url_path='recent')
-    def get_recent_posts(self, request):
-        
+    def get_recent_posts(self, request):        
         ordered_query = self.get_queryset().order_by('-created_at')
         serializer = self.get_serializer(ordered_query, many=True)
 
@@ -33,16 +29,12 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 
-
-
-class CategoryViewSet(viewsets.ModelViewSet):
-    
+class CategoryViewSet(viewsets.ModelViewSet): 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
     
     def get_serializer_class(self):
-        
         if self.action == 'get_recent_posts_per_category':
             return RecentPostsCategorySerializer
         
@@ -50,8 +42,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
     @action(detail=False,  url_path='recent-per-category')
-    def get_recent_posts_per_category(self, request):
-        
+    def get_recent_posts_per_category(self, request):        
         result_categories = Category.objects.get_recent_posts_per_category()
 
         serializer = self.get_serializer(result_categories, many=True)

@@ -7,14 +7,8 @@ from  django.contrib.postgres.expressions import ArraySubquery
 
 
 
-
-class PostManager(models.Manager):
-    
-    
-    def get_recent_posts_per_category_subquery(self):
-        
-    #    query_set = self.get_queryset
-        
+class PostManager(models.Manager): 
+    def get_recent_posts_per_category_subquery(self): 
         recent_posts_subquery = self.filter(category=OuterRef('pk')).values(
             data = JSONObject(
                     title = 'title', text = 'text', slug = 'slug'
@@ -23,13 +17,10 @@ class PostManager(models.Manager):
         
         return recent_posts_subquery
         
+ 
         
 class CategoryManager(models.Manager):
-    
-    def get_recent_posts_per_category(self):
-        
-        #query_set = self.get_queryset()
-        
+    def get_recent_posts_per_category(self):      
         recent_posts_subquery = apps.get_model('blog','Post').objects.get_recent_posts_per_category_subquery()
         
         result_query = self.annotate(

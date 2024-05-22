@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'corsheaders',
     
     'apps.users.apps.UsersConfig',
-    'apps.main.apps.MainConfig',
     'apps.blog.apps.BlogConfig',
     'apps.todo.apps.TodoConfig',
 ]
