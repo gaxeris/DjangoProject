@@ -37,5 +37,5 @@ urlpatterns = [
     path('api/v1/users/', include('apps.users.urls')),
     
     path('api/v1/blog/', include(router_blog.urls)),
-    path('api/v1/todo', include(router_todo.urls)),
+    path('api/v1/todo/', include(router_todo.urls)),
 ]
