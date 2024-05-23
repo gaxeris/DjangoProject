@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from apps.blog.models import Category, Post
+from apps.users.models import User
 
 
 
@@ -33,6 +34,12 @@ class PostModelTest(TestCase):
     
     @classmethod
     def setUpTestData(cls) -> None:
+        cls.user = User.objects.create(
+            username = 'temp_user',
+            password = 'temp_user'
+        )
+        cls.user.save()
+        
         cls.category = Category.objects.create(
             name='Gamedev',
             description='There are some news about gamedev in this category'
@@ -40,6 +47,7 @@ class PostModelTest(TestCase):
         cls.category.save()
         
         cls.post = Post.objects.create(
+            author = cls.user,
             title='LoL',
             text='Have you seen that riot want to add Vanguard to the game?',
             category=cls.category
@@ -117,6 +125,3 @@ class PostModelTest(TestCase):
         
 
         
-        
-    def test_recent_posts_subquery(self):
-        pass
