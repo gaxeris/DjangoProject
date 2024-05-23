@@ -48,6 +48,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AuthorsViewSet(viewsets.ModelViewSet):
+class AuthorsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = AuthorPostsSerializer
