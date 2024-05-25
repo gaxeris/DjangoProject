@@ -35,6 +35,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     def get_serializer_class(self):
+        """Makes viewset choose appropriate serializer if custom actions were used"""
         if self.action == "get_recent_posts_per_category":
             return RecentPostsCategorySerializer
 
@@ -42,6 +43,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, url_path="recent-per-category")
     def get_recent_posts_per_category(self, request):
+        """Returns data from query acquired via custom Category\`s manager method"""
         result_categories = Category.objects.get_recent_posts_per_category()
 
         serializer = self.get_serializer(result_categories, many=True)

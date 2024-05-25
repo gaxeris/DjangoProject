@@ -6,6 +6,11 @@ from config import settings
 
 
 class TodoItem(models.Model):
+    """To Do items model
+
+    Items of this model should be visible only to its owner
+    """
+
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="todo_items"
     )

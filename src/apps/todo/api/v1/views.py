@@ -6,6 +6,14 @@ from apps.todo.api.v1.serializers import TodoItemSerializer
 
 
 class TodoItemViewSet(viewsets.ModelViewSet):
+    """ViewSet that provides every HTTP method for TodoItems model
+
+    Its queryset provides items only to the authorized users and only those objects
+    that are owned by said users.
+    When 'post'-ing new ToDo item, this viewset autofills TodoItem.owner field with
+    a correct value.
+    """
+
     model = TodoItem
     serializer_class = TodoItemSerializer
     permission_classes = [IsAuthenticated]

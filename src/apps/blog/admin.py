@@ -5,7 +5,7 @@ from apps.blog.models import Category, Post
 # Register your models here.
 
 
-# генерация url при создании записей в админке
+# генерация slug при создании записей в админке на основе наименований
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 

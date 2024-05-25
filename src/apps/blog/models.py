@@ -9,6 +9,8 @@ from django.conf import settings
 
 
 class Category(models.Model):
+    """This model uses extended model manager"""
+
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
 
@@ -21,6 +23,9 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    """This model uses custom model manager and
+    has a method to generate unique slugs on save() based on Post\`s name"""
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
