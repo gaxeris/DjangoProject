@@ -1,4 +1,3 @@
-from time import sleep
 from rest_framework import serializers
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
