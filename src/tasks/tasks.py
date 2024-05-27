@@ -11,7 +11,6 @@ from apps.users.models import User
 @shared_task
 def upload(id, path, file_name):
 
-    print("Uploading image...")
     sleep(10)
 
     storage = FileSystemStorage()
@@ -21,7 +20,6 @@ def upload(id, path, file_name):
 
         instance = User.objects.get(pk=id)
         instance.image = picture
-        instance.save()
+        instance.save(update_fields=["image"])
 
     storage.delete(file_name)
-    print("Uploaded!")
