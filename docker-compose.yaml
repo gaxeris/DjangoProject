@@ -1,34 +1,60 @@
 version: '3.8'
 
 services:
-  web:
+  web_server:
     build: ./src
+    restart: unless-stopped
     ports:
       - '8000:8000'
     volumes:
-      - .:/usr/src/app
+      - static_data:/app/static
+      - media_data:/app/media
     environment:
       - DATABASE_NAME=django_db
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_HOST=pgdb
+      - DATABASE_HOST=pg_database
       - DATABASE_PORT=5432
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
-      - pgdb
+      - pg_database
+      - redis
 
-  pgdb:
+  pg_database:
     image: postgres:15
-    restart: always
+    restart: unless-stopped
     environment:
      - DATABASE_PORT=5435
      - POSTGRES_DB=django_db
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=postgres
+     - CELERY_BROKER=redis://redis:6379/0
+     - CELERY_BACKEND=redis://redis:6379/0
     ports:
     - '5435:5432'
     volumes:
     - pg_data:/var/lib/postgresql/data
 
+  celery:
+    build: ./src
+    command: celery --app=config worker --loglevel=info 
+    volumes:
+      - static_data:/app/static
+      - media_data:/app/media
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - web_server
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+
 volumes:
   pg_data:
+  static_data:
+  media_data:
