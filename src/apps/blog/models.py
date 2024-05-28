@@ -18,6 +18,10 @@ class Category(models.Model):
 
     objects = CategoryManager()
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -58,8 +62,6 @@ class Post(models.Model):
         return unique_slug
 
     def save(self, *args, **kwargs):
-
         if not self.id:
             self.slug = self.get_unique_slug()
-
         super(Post, self).save(*args, **kwargs)
