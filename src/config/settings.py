@@ -29,7 +29,7 @@ SECRET_KEY = "django-insecure-h=lpll-cp6r6#=+jyt6bmt*o*+6k^z=%+o9&^$pdblg*(#yj+d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "django"]
 
 
 # Application definition
@@ -67,6 +67,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://localhost:5173",
 ]
+
 
 # DRF settings
 REST_FRAMEWORK = {
@@ -151,10 +152,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    str(BASE_DIR / "static"),
-]
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 # Media files
 #  https://docs.djangoproject.com/en/5.0/topics/files/
