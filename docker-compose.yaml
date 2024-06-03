@@ -1,21 +1,25 @@
 version: '3.8'
 
 services:
-  web_server:
+  backend:
     build: ./src
     restart: unless-stopped
     ports:
       - '8000:8000'
     volumes:
-      - static_data:/app/static
-      - media_data:/app/media
+      - static_data:/usr/src/app/static
+      - media_data:/usr/src/app/media
     environment:
       - DATABASE_NAME=django_db
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_HOST=pg_database
       - DATABASE_PORT=5432
-    command: python manage.py runserver 0.0.0.0:8000
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0      
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    networks:
+      - backend_main
     depends_on:
       - pg_database
       - redis
@@ -28,24 +32,40 @@ services:
      - POSTGRES_DB=django_db
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=postgres
-     - CELERY_BROKER=redis://redis:6379/0
-     - CELERY_BACKEND=redis://redis:6379/0
     ports:
-    - '5435:5432'
+     - '5435:5432'
+    networks:
+     - backend_main
     volumes:
-    - pg_data:/var/lib/postgresql/data
+     - pg_data:/var/lib/postgresql/data
+
+  nginx:
+    build: ./src/nginx
+    restart: unless-stopped
+    volumes:
+      - static_data:/usr/src/app/static
+      - media_data:/usr/src/app/media
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - backend_main
 
   celery:
     build: ./src
     command: celery --app=config worker --loglevel=info 
+    restart: unless-stopped
     volumes:
-      - static_data:/app/static
-      - media_data:/app/media
+      - static_data:/usr/src/app/static
+      - media_data:/usr/src/app/media
     environment:
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
+    networks:
+      - backend_main
     depends_on:
-      - web_server
+      - backend
       - redis
 
   redis:
@@ -53,8 +73,17 @@ services:
     ports:
       - 6379:6379
     restart: unless-stopped
+    networks:
+      - backend_main
+    volumes:
+      - redis_data:/data
+
 
 volumes:
   pg_data:
   static_data:
   media_data:
+  redis_data:
+
+networks:
+ backend_main:
