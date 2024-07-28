@@ -11,8 +11,6 @@ from apps.users.models import User
 @shared_task
 def upload(id, path, file_name):
 
-    sleep(10)
-
     storage = FileSystemStorage()
     path_object = Path(path)
     with path_object.open(mode="rb") as file:
