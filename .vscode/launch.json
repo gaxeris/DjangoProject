@@ -1,0 +1,57 @@
+
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+{
+    "version": "0.2.0",
+      "configurations": [
+        {
+            "name": "Django",
+            "type": "debugpy",
+            "request": "launch",
+            "stopOnEntry": false,
+            "program": "${workspaceFolder}\\src\\manage.py",
+            "args": [
+                "runserver",
+                "--noreload",
+            ],
+            "preLaunchTask": "start-redis-container",
+            "postDebugTask": "stop-redis-container",
+            "justMyCode": false
+        },
+        {
+            "name": "Celery",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "args": [
+                "--app",
+                "src.config.celery.app",
+                "worker",
+                "--loglevel",
+                "DEBUG",
+                "--pool",
+                "solo",
+            ]
+        },
+        {
+            "name": "Celery Beat",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "args": [
+                "--app",
+                "src.config.celery.app",
+                "beat"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Django, Celery, Celery Beat",
+            "configurations": ["Django", "Celery", "Celery Beat"]
+        }
+    ]
+}

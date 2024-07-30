@@ -1,34 +1,96 @@
 version: '3.8'
 
 services:
-  web:
+  backend:
     build: ./src
+    restart: unless-stopped
     ports:
       - '8000:8000'
     volumes:
-      - .:/usr/src/app
+      - static_data:/usr/src/app/static
+      - media_data:/usr/src/app/media
     environment:
       - DATABASE_NAME=django_db
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_HOST=pgdb
+      - DATABASE_HOST=pg_database
       - DATABASE_PORT=5432
-    command: python manage.py runserver 0.0.0.0:8000
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0      
+   # command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    entrypoint: /usr/src/app/entrypoint.sh
+    networks:
+      - backend_main
     depends_on:
-      - pgdb
+      - pg_database
+      - redis
 
-  pgdb:
+  pg_database:
     image: postgres:15
-    restart: always
+    restart: unless-stopped
     environment:
      - DATABASE_PORT=5435
      - POSTGRES_DB=django_db
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=postgres
     ports:
-    - '5435:5432'
+     - '5435:5432'
+    networks:
+     - backend_main
     volumes:
-    - pg_data:/var/lib/postgresql/data
+     - pg_data:/var/lib/postgresql/data
+
+  nginx:
+    build: ./src/nginx
+    restart: unless-stopped
+    volumes:
+      - static_data:/usr/src/app/static
+      - media_data:/usr/src/app/media
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - backend_main
+
+  celery:
+    build: ./src
+    command: celery --app=config worker --loglevel=info 
+    restart: unless-stopped
+    volumes:
+      - static_data:/usr/src/app/static
+      - media_data:/usr/src/app/media
+    environment:
+      - DATABASE_NAME=django_db
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=pg_database
+      - DATABASE_PORT=5432
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0   
+    networks:
+      - backend_main
+    depends_on:
+      - backend
+      - redis
+      - pg_database
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    networks:
+      - backend_main
+    volumes:
+      - redis_data:/data
+
 
 volumes:
   pg_data:
+  static_data:
+  media_data:
+  redis_data:
+
+networks:
+ backend_main:

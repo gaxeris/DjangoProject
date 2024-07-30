@@ -9,7 +9,7 @@ from django.contrib.postgres.expressions import ArraySubquery
 class PostManager(models.Manager):
     """Manager for Post model that contains extra subquery method for Category\`s manager"""
 
-    def get_recent_posts_per_category_subquery(self):
+    def get_recent_posts_per_category_subquery(self, limit: int = 3):
         """Returns subquery of recent posts based on the foreign key in the field category.
 
         This method is intended to be used by Category\`s manager.
@@ -20,7 +20,7 @@ class PostManager(models.Manager):
         recent_posts_subquery = (
             self.filter(category=OuterRef("pk"))
             .values(data=JSONObject(title="title", text="text", slug="slug"))
-            .order_by("-created_at")[:3]
+            .order_by("-created_at")[:limit]
         )
 
         return recent_posts_subquery
